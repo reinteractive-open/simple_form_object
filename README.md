@@ -1,4 +1,4 @@
-# SimpleFormObjects
+# SimpleFormObject
 
 Allows you to make really simple non-persisted form objects or models.
 
@@ -20,7 +20,7 @@ It gives you:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'simple_form_objects'
+gem 'simple_form_object'
 ```
 
 And then execute:
