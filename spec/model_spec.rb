@@ -97,7 +97,7 @@ describe 'including SimpleFormObject' do
         include SimpleFormObject
       end
 
-      Klass
+      KlassForm
     end
 
     it 'should return an ActiveModel::Name' do

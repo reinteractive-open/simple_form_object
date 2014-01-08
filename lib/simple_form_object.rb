@@ -23,7 +23,7 @@ module SimpleFormObject
     end
 
     def model_name
-      ActiveModel::Name.new(self, nil, self.to_s.gsub(/Form^/, ''))
+      ActiveModel::Name.new(self, nil, self.to_s.gsub(/Form$/, ''))
     end
   end
 
