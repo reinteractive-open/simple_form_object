@@ -13,7 +13,7 @@ It gives you:
 
 1. Default values for your form attributes.
 2. Integration with simple_form so you don't need to specify the field type on the form.
-
+3. Thanks to `ActiveModel::Model` you can use standard Rails validations on your attributes.
 
 ## Installation
 
@@ -39,6 +39,9 @@ class PostForm
   attribute :body, :text
   attribute :title, :string
   attribute :publish_date, :datetime, default: Time.now
+
+  validates_presence_of :body
+  validates_presence_of :title
 end
 ```
 
