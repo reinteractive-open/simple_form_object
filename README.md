@@ -2,7 +2,7 @@
 
 Allows you to make really simple non-persisted form objects or models.
 
-** Only suitable for Rails 4 applications. **
+**Only suitable for Rails 4 applications.**
 
 You don't need to remember to:
 
