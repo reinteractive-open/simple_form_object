@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["lengarvey@gmail.com"]
   spec.summary       = %q{Simple form objects for simple form and rails}
   spec.description   = %q{Very simple form objects for simple form and rails}
-  spec.homepage      = "http://github.com/lengarvey/simple_form_objects"
+  spec.homepage      = "http://github.com/reinteractive-open/simple_form_objects"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
