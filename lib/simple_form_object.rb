@@ -39,9 +39,9 @@ module SimpleFormObject
   end
 
   class Attribute
-    def initialize(name, type, options)
+    def initialize(name, type = nil, options)
       @name = name
-      @type = type
+      @type = type || :string
       @options = options
 
       extract_options
@@ -55,14 +55,16 @@ module SimpleFormObject
 
     def apply_default_to(form)
       if form.send(@name).nil?
-        form.send("#{@name}=", @default) if @default
+        form.send("#{@name}=", @default) if @apply_default
       end
     end
 
     private
 
     def extract_options
-      @default = options.fetch(:default, nil)
+      @apply_default = true
+      @default = options.fetch(:default) { @apply_default = false; nil }
+      @skip_validations = options.fetch(:skip_validations, false)
     end
   end
 
