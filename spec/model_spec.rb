@@ -1,15 +1,11 @@
 require 'spec_helper'
 
-describe 'including SimpleFormObject' do
+describe 'SimpleFormObject' do
+  let(:base_klass) { Class.new.tap{|k| k.include SimpleFormObject } }
+  let(:klass) { base_klass }
+  let(:instance) { klass.new }
+
   context 'when included' do
-    let(:instance) do
-      class Klass
-        include SimpleFormObject
-      end
-
-      Klass.new
-    end
-
     it 'should have ActiveModel::Model' do
       expect(instance).to respond_to :valid?
     end
@@ -17,14 +13,9 @@ describe 'including SimpleFormObject' do
 
   describe '.attribute' do
     let(:attribute) { :foo }
-    let(:instance) do
-      class Klass
-        include SimpleFormObject
 
-        attribute :foo
-      end
-
-      Klass.new
+    before do
+      klass.attribute :foo
     end
 
     it 'should respond to "attribute"' do
@@ -39,15 +30,10 @@ describe 'including SimpleFormObject' do
       let(:types) { %i(boolean string email url tel password search text file hidden integer float decimal range datetime date time select radio_buttons check_boxes country time_zone) }
 
       let(:type) { :boolean }
-      let(:attr) { :foo }
-      let(:instance) do
-        class AnotherForm
-          include SimpleFormObject
+      let(:attr) { :la }
 
-          attribute :foo, :boolean
-        end
-
-        AnotherForm.new
+      before do
+        klass.attribute attr, type
       end
 
       it 'should return a fake column with the correct type' do
@@ -56,34 +42,23 @@ describe 'including SimpleFormObject' do
     end
 
     describe 'options' do
+      let(:type) { :boolean }
+      let(:attr) { :doh }
+
+      before do
+        klass.attribute attr, type, default: true
+      end
+
       describe 'default' do
-        let(:instance) do
-          class AnotherForm
-            include SimpleFormObject
-
-            attribute :foo, :boolean, default: true
-          end
-
-          AnotherForm.new
-        end
-
         it 'should set the attribute to the default' do
-          expect(instance.foo).to eq true
+          expect(instance.doh).to eq true
         end
 
         context 'when a value is supplied in the initialization hash' do
-          let(:instance) do
-            class AnotherForm
-              include SimpleFormObject
-
-              attribute :foo, :boolean, default: true
-            end
-
-            AnotherForm.new(foo: false)
-          end
+          let(:instance) { klass.new(doh: false) }
 
           it 'should use the value in the hash' do
-            expect(instance.foo).to eq false
+            expect(instance.doh).to eq false
           end
         end
 
