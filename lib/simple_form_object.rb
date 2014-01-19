@@ -38,6 +38,14 @@ module SimpleFormObject
     end
   end
 
+  def attributes
+    attribs = {}
+    self.class._attributes.each do |a|
+      attribs[a.name] = self.send(a.name)
+    end
+    attribs
+  end
+
   class Attribute
     def initialize(name, type = nil, options)
       @name = name
