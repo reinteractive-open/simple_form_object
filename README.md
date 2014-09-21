@@ -2,7 +2,7 @@
 
 Allows you to make really simple non-persisted form objects or models.
 
-**Only suitable for Rails 4 applications.**
+**This branch is for Rails 3 applications.**
 
 You don't need to remember to:
 
@@ -13,7 +13,7 @@ It gives you:
 
 1. Default values for your form attributes.
 2. Integration with simple_form so you don't need to specify the field type on the form.
-3. Thanks to `ActiveModel::Model` you can use standard Rails validations on your attributes.
+3. Thanks to `ActiveModel::Validation` you can use standard Rails validations on your attributes.
 
 ## Installation
 
@@ -45,7 +45,7 @@ class PostForm
 end
 ```
 
-`SimpleFormObject` includes `ActiveModel::Model` so you don't need to.
+`SimpleFormObject` includes `ActiveModel::Validation` so you don't need to.
 It also intelligently sets the `model_name` on the class so that Rails
 routing works as expected. As an example:
 

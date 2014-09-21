@@ -1,11 +1,12 @@
 require "simple_form_object/version"
 require "active_model"
-require "active_support"
 
 module SimpleFormObject
-  extend ActiveSupport::Concern
 
-  include ActiveModel::Model
+  def self.included(base)
+    base.send(:include, ActiveModel::Validations)
+    base.extend(ClassMethods)
+  end
 
   module ClassMethods
     def attribute(name, type = :string, options = {})
@@ -32,7 +33,9 @@ module SimpleFormObject
   end
 
   def initialize(attributes={})
-    super
+    attributes.map do |k,v|
+      self.send("#{k}=",v)
+    end
     self.class._attributes.each do |attribute|
       attribute.apply_default_to(self)
     end
@@ -56,6 +59,14 @@ module SimpleFormObject
     end
 
     attr_accessor :name, :type, :options
+
+    def number?
+      [:integer,:decimal].include?(@type)
+    end
+
+    def limit
+      255
+    end
 
     def fake_column
       self

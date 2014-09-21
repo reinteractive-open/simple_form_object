@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe 'SimpleFormObject' do
-  let(:base_klass) { Class.new.tap{|k| k.include SimpleFormObject } }
+  let(:base_klass) { Class.new.tap{|k| k.send(:include, SimpleFormObject) } }
   let(:klass) { base_klass }
   let(:instance) { klass.new }
 
   context 'when included' do
-    it 'should have ActiveModel::Model' do
+    it 'should have ActiveModel::Validation' do
       expect(instance).to respond_to :valid?
     end
   end
@@ -80,7 +80,7 @@ describe 'SimpleFormObject' do
     end
 
     it 'should remove Form from the name of the class' do
-      expect(klass.model_name.name).to eq "Klass"
+      expect(klass.model_name).to eq "Klass"
     end
   end
 end
