@@ -57,7 +57,25 @@ routing works as expected. As an example:
 <% end %>
 ```
 
-Will create a HTML form which will `POST` to `posts_path`.
+Will create a HTML form which will `POST` to `posts_path`. In your controller, you can do something like this:
+
+```ruby
+def new
+  @post_form = PostForm.new
+end
+
+def create
+  @post_form = PostForm.new(param[:post])
+  if @post_form.valid?
+    # save the data
+    flash[:notice] = "Post created successfully."
+    # redirect somewhere
+  else
+    flash[:error] = @post_form.errors.full_messages
+    render 'new'
+  end
+end
+```
 
 ## Todo:
 
