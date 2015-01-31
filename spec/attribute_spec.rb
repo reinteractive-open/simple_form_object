@@ -53,6 +53,47 @@ describe SimpleFormObject::Attribute do
         expect(form.foo).to eq false
       end
     end
+  end
 
+  describe '#limit' do
+    subject(:attribute) { SimpleFormObject::Attribute.new(:name, :string, {}) }
+
+    it 'returns nil' do
+      expect(subject.limit).to be_nil
+    end
+  end
+
+  describe '#number?' do
+    context 'when attribute is an integer' do
+      subject(:attribute) { SimpleFormObject::Attribute.new(:name, :integer, {}) }
+
+      it 'returns true' do
+        expect(subject).to be_number
+      end
+    end
+
+    context 'when attribute is a float' do
+      subject(:attribute) { SimpleFormObject::Attribute.new(:name, :float, {}) }
+
+      it 'returns true' do
+        expect(subject).to be_number
+      end
+    end
+
+    context 'when attribute is a decimal' do
+      subject(:attribute) { SimpleFormObject::Attribute.new(:name, :decimal, {}) }
+
+      it 'returns true' do
+        expect(subject).to be_number
+      end
+    end
+
+    context 'when attribute is a string' do
+      subject(:attribute) { SimpleFormObject::Attribute.new(:name, :string, {}) }
+
+      it 'returns false' do
+        expect(subject).not_to be_number
+      end
+    end
   end
 end

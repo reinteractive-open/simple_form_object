@@ -67,20 +67,56 @@ describe 'SimpleFormObject' do
   end
 
   describe '.model_name' do
-    let(:klass) do
-      class KlassForm
-        include SimpleFormObject
+    context 'by convention' do
+      let(:klass) do
+        class KlassForm
+          include SimpleFormObject
+        end
+
+        KlassForm
       end
 
-      KlassForm
+      it 'should return an ActiveModel::Name' do
+        expect(klass.model_name).to be_a_kind_of ActiveModel::Name
+      end
+
+      it 'should remove Form from the name of the class' do
+        expect(klass.model_name.name).to eq 'Klass'
+      end
     end
 
-    it 'should return an ActiveModel::Name' do
-      expect(klass.model_name).to be_a_kind_of ActiveModel::Name
+    context 'by declaration' do
+      let(:klass) do
+        class KlassForm
+          include SimpleFormObject
+
+          route_as :custom
+        end
+
+        KlassForm
+      end
+
+      it 'should return an ActiveModel::Name' do
+        expect(klass.model_name).to be_a_kind_of ActiveModel::Name
+      end
+
+      it 'should remove Form from the name of the class' do
+        expect(klass.model_name.name).to eq 'Custom'
+      end
+    end
+  end
+
+  describe '#has_attribute?' do
+    before do
+      klass.attribute :foo
     end
 
-    it 'should remove Form from the name of the class' do
-      expect(klass.model_name.name).to eq "Klass"
+    it 'returns true for a declared attribute' do
+      expect(instance.has_attribute?(:foo)).to be(true)
+    end
+
+    it 'returns false for a declared attribute' do
+      expect(instance.has_attribute?(:bar)).to be(false)
     end
   end
 end
