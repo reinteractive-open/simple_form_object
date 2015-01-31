@@ -1,4 +1,5 @@
 require "simple_form_object/version"
+require "simple_form_object/attribute"
 require "active_model"
 require "active_support"
 
@@ -14,6 +15,10 @@ module SimpleFormObject
       _attributes << Attribute.new(name, type, options)
     end
 
+    def route_as(model_name)
+      @model_name = model_name.to_s.camelize
+    end
+
     def _attributes
       @_attributes ||= []
     end
@@ -23,7 +28,13 @@ module SimpleFormObject
     end
 
     def model_name
-      ActiveModel::Name.new(self, nil, self.to_s.gsub(/Form$/, ''))
+      ActiveModel::Name.new(self, nil, model_name_for_routing)
+    end
+
+    private
+
+    def model_name_for_routing
+      @model_name || to_s.gsub(/Form$/, "")
     end
   end
 
@@ -46,34 +57,7 @@ module SimpleFormObject
     attribs
   end
 
-  class Attribute
-    def initialize(name, type = nil, options)
-      @name = name
-      @type = type || :string
-      @options = options
-
-      extract_options
-    end
-
-    attr_accessor :name, :type, :options
-
-    def fake_column
-      self
-    end
-
-    def apply_default_to(form)
-      if form.send(@name).nil?
-        form.send("#{@name}=", @default) if @apply_default
-      end
-    end
-
-    private
-
-    def extract_options
-      @apply_default = true
-      @default = options.fetch(:default) { @apply_default = false; nil }
-      @skip_validations = options.fetch(:skip_validations, false)
-    end
+  def has_attribute?(attribute)
+    attributes.key?(attribute)
   end
-
 end
