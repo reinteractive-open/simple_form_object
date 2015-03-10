@@ -4,7 +4,6 @@ require "active_support"
 
 module SimpleFormObject
   extend ActiveSupport::Concern
-
   include ActiveModel::Model
 
   module ClassMethods
@@ -12,6 +11,14 @@ module SimpleFormObject
       self.send(:attr_accessor, name)
 
       _attributes << Attribute.new(name, type, options)
+    end
+
+    def delegate_all(options = {})
+      @_delegation_target = options.fetch(:to)
+    end
+
+    def _delegation_target
+      @_delegation_target
     end
 
     def _attributes
@@ -24,6 +31,38 @@ module SimpleFormObject
 
     def model_name
       ActiveModel::Name.new(self, nil, self.to_s.gsub(/Form$/, ''))
+    end
+  end
+
+  def method_missing(method, *args, &block)
+    return super unless delegatable?(method)
+
+    # TODO: Figure out why self.class.delegate(method, to: self.class._delegation_target)
+    # doesn't work.
+
+    self.class.send(:define_method, method) do |*args, &block|
+      _delegation_target.send(method, *args, &block)
+    end
+
+    send(method, *args, &block)
+  end
+
+  def delegatable?(method)
+
+    if !_delegation_target.nil?
+      _delegation_target.respond_to?(method)
+    else
+      false
+    end
+  end
+
+  def _delegation_target
+    target = self.class._delegation_target
+
+    if target.is_a? Symbol
+      self.send(target)
+    else
+      target
     end
   end
 
