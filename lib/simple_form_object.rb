@@ -102,11 +102,19 @@ module SimpleFormObject
 
     def apply_default_to(form)
       if form.send(@name).nil?
-        form.send("#{@name}=", @default) if @apply_default
+        form.send("#{@name}=", default_value(form)) if @apply_default
       end
     end
 
     private
+
+    def default_value(context)
+      if @default.respond_to?(:call)
+        context.instance_eval(&@default)
+      else
+        @default
+      end
+    end
 
     def extract_options
       @apply_default = true

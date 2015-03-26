@@ -54,5 +54,23 @@ describe SimpleFormObject::Attribute do
       end
     end
 
+    context 'with a lambda/proc default' do
+      let(:default) { Proc.new { :bar } }
+
+      it 'calls the lambda' do
+        expect(form).to receive("#{name}=").with(:bar)
+        attribute.apply_default_to(form)
+      end
+
+      context 'when the proc references the form' do
+        let(:default) { Proc.new { current_foo } }
+        let(:form) { double('Form', foo: nil, current_foo: :bar) }
+
+        it 'calls the lambda' do
+          expect(form).to receive("#{name}=").with(:bar)
+          attribute.apply_default_to(form)
+        end
+      end
+    end
   end
 end
