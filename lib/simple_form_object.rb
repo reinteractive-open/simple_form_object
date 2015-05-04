@@ -70,6 +70,10 @@ module SimpleFormObject
     self.class._attribute(attribute).fake_column
   end
 
+  def has_attribute?(attribute_name)
+    self.class._attribute(attribute_name).present?
+  end
+
   def initialize(attributes={})
     super
     self.class._attributes.each do |attribute|

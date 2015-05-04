@@ -39,6 +39,10 @@ describe 'SimpleFormObject' do
       it 'should return a fake column with the correct type' do
         expect(instance.column_for_attribute(attr).type).to eq type
       end
+
+      it 'should say that the attribute exists' do
+        expect(instance.has_attribute?(attr)).to eq true
+      end
     end
 
     describe 'options' do
