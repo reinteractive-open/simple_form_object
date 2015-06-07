@@ -20,7 +20,15 @@ module SimpleFormObject
     end
 
     def _attributes
-      @_attributes ||= []
+      inherited_attributes = []
+
+      ancestors.drop(1).each do |ancestor|
+        if ancestor.respond_to?(:_attributes)
+          inherited_attributes.concat(ancestor._attributes)
+        end
+      end
+
+      @_attributes ||= inherited_attributes
     end
 
     def _attribute(attribute_name)
