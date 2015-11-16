@@ -16,7 +16,8 @@ module SimpleFormObject
 
     def apply_default_to(form)
       if form.send(@name).nil?
-        form.send("#{@name}=", @default) if @apply_default
+        default_value = @default.respond_to?(:call) ? @default.call : @default
+        form.send("#{@name}=", default_value) if @apply_default
       end
     end
 
